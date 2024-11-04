@@ -4,25 +4,13 @@
 #include <tuple>
 using namespace std;
 
-int main_menu() {
-    cout << "1. Add Villager" << endl;
-    cout << "2. Delete Villager" << endl;
-    cout << "3. Increase Friendship" << endl;
-    cout << "4. Decrease Friendship" << endl;
-    cout << "5. Search for Villager" << endl;
-    cout << "6. Exit" << endl;
-    cout << "Choice --> ";
-    cout << "Choice --> ";
-    int choice;
-    cin >> choice;
-    while (choice > 6 || choice < 1) {
-        cout << "Invalid choice! Please try again --> ";
-        cin.clear();
-        cin.ignore();
-        cin >> choice;
-    }
-    return choice;
-}
+int mainMenu();
+void addVillager();
+void deleteVillager();
+void increaseFriendship();
+void decreaseFriendship();
+void searchForVillager();
+int getInt(int min, int max);
 
 int main() {
     // declarations
@@ -75,4 +63,55 @@ int main() {
     cout << "Size after clear: " << villagerColors.size() << endl;
 
     return 0;
+}
+
+int main_menu() {
+    cout << "1. Add Villager" << endl;
+    cout << "2. Delete Villager" << endl;
+    cout << "3. Increase Friendship" << endl;
+    cout << "4. Decrease Friendship" << endl;
+    cout << "5. Search for Villager" << endl;
+    cout << "6. Exit" << endl;
+    cout << "Enter choice: ";
+    return getInt(1, 6);
+}
+
+void printVillagerData(map<string, tuple<int, string, string>> *villagerData) {
+    cout << "Villager details:" << endl;
+    for (auto villager : *villagerData) {
+        cout << villager.first << " [" << get<0>(villager.second) << ", " << get<1>(villager.second) << ", " << get<2>(villager.second) << "]" << endl;
+    }
+}
+
+void addVillager(map<string, tuple<int, string, string>> *villagerData) {
+    cout << "Villager name: ";
+    string name;
+    cin >> name;
+    cout << "Friendship level: ";
+    int level = getInt(0, 10);
+    cout << "Species: ";
+    string species;
+    cin >> species;
+    cout << "Catchphrase: ";
+    string catchphrase;
+    cin >> catchphrase;
+
+    villagerData->insert({name, {level, species, catchphrase}});
+    cout << name << " added." << endl;
+}
+
+void deleteVillager(map<string, tuple<int, string, string>> *villagerData) {
+
+}
+
+int getInt(int min, int max) {
+    int input;
+    cin >> input;
+    while (input > max || input < min) {
+        cout << "Invalid input! Please try again: ";
+        cin.clear();
+        cin.ignore();
+        cin >> input;
+    }
+    return input;
 }
