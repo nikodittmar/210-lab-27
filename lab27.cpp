@@ -87,21 +87,54 @@ void addVillager(map<string, tuple<int, string, string>> *villagerData) {
     cout << "Villager name: ";
     string name;
     cin >> name;
-    cout << "Friendship level: ";
+    cout << endl << "Friendship level: ";
     int level = getInt(0, 10);
-    cout << "Species: ";
+    cout << endl << "Species: ";
     string species;
     cin >> species;
-    cout << "Catchphrase: ";
+    cout << endl << "Catchphrase: ";
     string catchphrase;
     cin >> catchphrase;
 
     villagerData->insert({name, {level, species, catchphrase}});
-    cout << name << " added." << endl;
+    cout << endl << name << " added." << endl;
 }
 
 void deleteVillager(map<string, tuple<int, string, string>> *villagerData) {
+    cout << "What is the name of the villager to delete: ";
+    string toDelete;
+    cin >> toDelete;
 
+    while (villagerData->find(toDelete) == villagerData->end()) {
+        cout << endl << "Villager not found! Reenter the villager name: ";
+        cin.clear();
+        cin.ignore();
+        cin >> toDelete;
+    }
+
+    villagerData->erase(toDelete);
+    cout << endl << toDelete << " was deleted." << endl;
+}
+
+void increaseFriendship(map<string, tuple<int, string, string>> *villagerData) {
+    cout << "What is the name of the villager to increase friendship: ";
+    string toIncrease;
+    cin >> toIncrease;
+
+    while (villagerData->find(toIncrease) == villagerData->end()) {
+        cout << endl << "Villager not found! Reenter the villager name: ";
+        cin.clear();
+        cin.ignore();
+        cin >> toIncrease;
+    }
+
+    auto it = villagerData->find(toIncrease);
+    if (get<0>(it->second) < 10) {
+        get<0>(it->second) += 1;
+        cout << endl << toIncrease << " friendship was increased." << endl;
+    } else {
+        cout << endl << toIncrease << " friendship is already at it max!" << endl;
+    }
 }
 
 int getInt(int min, int max) {
