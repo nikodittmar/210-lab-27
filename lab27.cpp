@@ -1,3 +1,4 @@
+// COMSC 210 | Lab 27 | Niko Dittmar
 #include <iostream>
 #include <map>
 #include <vector>
@@ -5,18 +6,19 @@
 using namespace std;
 
 int mainMenu();
-void addVillager();
-void deleteVillager();
-void increaseFriendship();
-void decreaseFriendship();
-void searchForVillager();
-int getInt(int min, int max);
+void printVillagerData(map<string, tuple<int, string, string>>*);
+void addVillager(map<string, tuple<int, string, string>>*);
+void deleteVillager(map<string, tuple<int, string, string>>*);
+void increaseFriendship(map<string, tuple<int, string, string>>*);
+void decreaseFriendship(map<string, tuple<int, string, string>>*);
+void searchForVillager(map<string, tuple<int, string, string>>*);
+int getInt(int, int);
 
 int main() {
 
     map<string, tuple<int, string, string>> villagerData;
 
-    int input = main_menu();
+    int input = mainMenu();
     while (input != 6) {
         switch(input) {
             case 1:
@@ -35,13 +37,20 @@ int main() {
                 searchForVillager(&villagerData);
                 break;
         }
+        cout << endl;
+        printVillagerData(&villagerData);
+        cout << endl;
+        input = mainMenu();
     }
 
 
     return 0;
 }
 
-int main_menu() {
+// mainMenu() presents the user the possible options and receives their response.
+// arguments: none
+// returns: the users choice.
+int mainMenu() {
     cout << "1. Add Villager" << endl;
     cout << "2. Delete Villager" << endl;
     cout << "3. Increase Friendship" << endl;
@@ -52,6 +61,9 @@ int main_menu() {
     return getInt(1, 6);
 }
 
+// printVillagerData() prints the villager data to the console.
+// arguments: the villager data to print.
+// returns: none
 void printVillagerData(map<string, tuple<int, string, string>> *villagerData) {
     cout << "Villager details:" << endl;
     for (auto villager : *villagerData) {
@@ -59,16 +71,19 @@ void printVillagerData(map<string, tuple<int, string, string>> *villagerData) {
     }
 }
 
+// addVillager() Adds a villager to the villager map.
+// arguments: the villager map to add a villager to.
+// returns: none
 void addVillager(map<string, tuple<int, string, string>> *villagerData) {
     cout << "Villager name: ";
     string name;
     cin >> name;
-    cout << endl << "Friendship level: ";
+    cout << "Friendship level: ";
     int level = getInt(0, 10);
-    cout << endl << "Species: ";
+    cout << "Species: ";
     string species;
     cin >> species;
-    cout << endl << "Catchphrase: ";
+    cout << "Catchphrase: ";
     string catchphrase;
     cin >> catchphrase;
 
@@ -76,6 +91,9 @@ void addVillager(map<string, tuple<int, string, string>> *villagerData) {
     cout << endl << name << " added." << endl;
 }
 
+// deleteVillager() deletes a villager from the villager map.
+// arguments: the villager map to delete a villager from.
+// returns: none
 void deleteVillager(map<string, tuple<int, string, string>> *villagerData) {
     cout << "What is the name of the villager to delete: ";
     string toDelete;
@@ -92,6 +110,9 @@ void deleteVillager(map<string, tuple<int, string, string>> *villagerData) {
     cout << endl << toDelete << " was deleted." << endl;
 }
 
+// increaseFriendship() increments the friendship level villager for a villager in the villager map.
+// arguments: the villager map with the villager to increment friendship level.
+// returns: none
 void increaseFriendship(map<string, tuple<int, string, string>> *villagerData) {
     cout << "What is the name of the villager to increase friendship: ";
     string toIncrease;
@@ -113,6 +134,9 @@ void increaseFriendship(map<string, tuple<int, string, string>> *villagerData) {
     }
 }
 
+// decreaseFriendship() decrements the friendship level villager for a villager in the villager map.
+// arguments: the villager map with the villager to decrement friendship level.
+// returns: none
 void decreaseFriendship(map<string, tuple<int, string, string>> *villagerData) {
     cout << "What is the name of the villager to decrease friendship: ";
     string toDecrease;
@@ -127,13 +151,16 @@ void decreaseFriendship(map<string, tuple<int, string, string>> *villagerData) {
 
     auto it = villagerData->find(toDecrease);
     if (get<0>(it->second) < 10) {
-        get<0>(it->second) += 1;
+        get<0>(it->second) -= 1;
         cout << endl << toDecrease << " friendship was decreased." << endl;
     } else {
         cout << endl << toDecrease << " friendship is already at it max!" << endl;
     }
 }
 
+// searchForVillager() finds and prints a villager in the villager map
+// arguments: the villager map to search from.
+// returns: none
 void searchForVillager(map<string, tuple<int, string, string>> *villagerData) {
     cout << "Enter the name of the villager to search for: ";
     string searchKey;
@@ -146,6 +173,9 @@ void searchForVillager(map<string, tuple<int, string, string>> *villagerData) {
     }
 }
 
+// getInt() gets an integer input from the user within a certain range.
+// arguments: minimum and maximum value to get.
+// returns: the number inputted.
 int getInt(int min, int max) {
     int input;
     cin >> input;
