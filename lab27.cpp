@@ -13,54 +13,30 @@ void searchForVillager();
 int getInt(int min, int max);
 
 int main() {
-    // declarations
-    map<string, tuple<int, string, string>> villagerColors;
 
-    // insert elements into the map
-    // note how the right-hand side of the assignment are the vector elements
-    villagerColors["Audie"] = {"Orange", "Yellow", "Red"};
-    villagerColors["Raymond"] = {"Black", "Gray", "White"};
-    villagerColors.insert({"Marshal", {"Blue", "White", "Black"}});
+    map<string, tuple<int, string, string>> villagerData;
 
-    // access the map using a range-based for loop
-    cout << "Villagers and their favorite colors (range-based for loop):" << endl;
-    for (auto pair : villagerColors) {
-        cout << pair.first << ": ";
-        for (auto color : pair.second)
-            cout << color << " ";
-        cout << endl;
-    }
-
-    // access the map using iterators
-    cout << "\nVillagers and their favorite colors (iterators):" << endl;
-    for (map<string, vector<string>>::iterator it = villagerColors.begin(); 
-                                               it != villagerColors.end(); ++it) {
-        cout << it->first << ": ";
-        for (auto color : it->second) {
-            cout << color << " ";
+    int input = main_menu();
+    while (input != 6) {
+        switch(input) {
+            case 1:
+                addVillager(&villagerData);
+                break;
+            case 2:
+                deleteVillager(&villagerData);
+                break;
+            case 3:
+                increaseFriendship(&villagerData);
+                break;
+            case 4:
+                decreaseFriendship(&villagerData);
+                break;
+            case 5:
+                searchForVillager(&villagerData);
+                break;
         }
-        cout << endl;
     }
 
-    // delete an element
-    villagerColors.erase("Raymond");
-
-    // search for an element using .find() to avoid errors
-    string searchKey = "Audie";
-    auto it = villagerColors.find(searchKey);
-    if (it != villagerColors.end()) {  // the iterator points to beyond the end of the map
-                                       // if searchKey is not found
-        cout << "\nFound " << searchKey << "'s favorite colors: ";
-        for (auto color : it->second)  // range loop to traverse the value/vector
-            cout << color << " ";
-        cout << endl;
-    } else
-        cout << endl << searchKey << " not found." << endl;
-
-    // report size, clear, report size again to confirm map operations
-    cout << "\nSize before clear: " << villagerColors.size() << endl;
-    villagerColors.clear();
-    cout << "Size after clear: " << villagerColors.size() << endl;
 
     return 0;
 }
@@ -134,6 +110,39 @@ void increaseFriendship(map<string, tuple<int, string, string>> *villagerData) {
         cout << endl << toIncrease << " friendship was increased." << endl;
     } else {
         cout << endl << toIncrease << " friendship is already at it max!" << endl;
+    }
+}
+
+void decreaseFriendship(map<string, tuple<int, string, string>> *villagerData) {
+    cout << "What is the name of the villager to decrease friendship: ";
+    string toDecrease;
+    cin >> toDecrease;
+
+    while (villagerData->find(toDecrease) == villagerData->end()) {
+        cout << endl << "Villager not found! Reenter the villager name: ";
+        cin.clear();
+        cin.ignore();
+        cin >> toDecrease;
+    }
+
+    auto it = villagerData->find(toDecrease);
+    if (get<0>(it->second) < 10) {
+        get<0>(it->second) += 1;
+        cout << endl << toDecrease << " friendship was decreased." << endl;
+    } else {
+        cout << endl << toDecrease << " friendship is already at it max!" << endl;
+    }
+}
+
+void searchForVillager(map<string, tuple<int, string, string>> *villagerData) {
+    cout << "Enter the name of the villager to search for: ";
+    string searchKey;
+    cin >> searchKey;
+    auto it = villagerData->find(searchKey);
+    if (it == villagerData->end()) {
+        cout << endl << "Villager not found!" << endl;
+    } else {
+        cout << endl << it->first << " [" << get<0>(it->second) << ", " << get<1>(it->second) << ", " << get<2>(it->second) << "]" << endl;
     }
 }
 
